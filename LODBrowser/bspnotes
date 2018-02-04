@@ -1,0 +1,40 @@
+found that i should use ajax to send the servlet response to another place than a blank tab
+where to insert the ajax?
+the d3.json only accepts something that has a different location than the html itself
+d3.json(<location>,<a function>)
+thinking of using jquery to reroute the call from the form on button click
+and then use the post inside the d3.json()
+reformatted the code in a way that the draw function is a separate function
+the reformatting doesn't work.. gotta find a solution to that later, but is not necessary
+plan now is to save the form data in sessionstorage and on reload of the page recall them from there
+then the variables are inserted in the servlet call
+the button should now only reload the page
+thats all bullshit too, the right way to do it, or the easiest way is trough jquery
+it finally works, kudos to Gilles
+two problems now, first the graph is sometimes generated in the upper corner
+second, upon searching a new entity, it just displays the second graph on top of the previous
+I am also thinking of a way how to display the meaning of the connection, maybe even as node.
+Also the text of the nodes is too small, the nodes are too small too
+The problem of the gravity persists too
+i should also make he program search for keywords which are not 100% like in the db
+Succesfully set the with of the svg (where everything is drawn on) through jquery
+i thought it would be nice if the text would only pop up on pointing with the mouse on it
+
+changed the code to make it load additional nodes to fill the graph, also slight design changes
+A bug persists where the graph is stuck in the corner of the svg, only pulling it makes it unfold
+
+error at (')
+look for a possibility to make pred visible after hovering 2 secs over it, look at d3 lib
+leftcorner bug
+reload svg before creation of new
+	works 5 min
+new form fields depth, limit
+	configurable limit added 10 min
+remove <_>
+	removed symbols, now db needs much longer for response? 40 min
+make work for incomplete words
+	works now 10 min
+different colors for different predicates
+
+make sql query faster by grouping search string together into one single query per depth
+and maybe remove terms already searched for

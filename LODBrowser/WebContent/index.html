@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+	<style>
+	
+	.links line {
+	  stroke: #999;
+	  stroke-opacity: 0.6;
+	}
+	
+	.nodes circle {
+	  stroke: #fff;
+	  stroke-width: 1.5px;
+	}
+	
+	text {
+	  font-family: sans-serif;
+	  font-size: 9px;
+	}
+	
+	</style>
+
+<head>
+	<title>Linked Data</title>
+	<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+	<style>
+		body {
+		    font-family: 'Roboto';font-size: 15px;
+		    margin:0px;
+		}
+	</style>
+</head>
+
+<body>
+	<div style="background-color:MediumSeaGreen; color:white; padding:10px; ">
+	
+		<h1 style="font-size:25px;padding-left:80px;padding-top:0px;margin-top:10px;">Open Linked Data Browser</h1>
+		<p>Enter your search term below to get a nice graphical representation of the data.</p>
+	
+		<form id="myForm" action="http://localhost:8080/LODVisualizerV2/JDBC_Servlet" method="get">
+		  Subject: 		<input type="text" name="subj" autofocus/>
+		  Predicate: 	<input type="text" name="pred"/>
+		  Object: 		<input type="text" name="obj"/>
+		  Limit: 		<input type="number" value="50" name="lim"/>
+		  Depth: 		<input type="range" min="0" max="4" name="dep"/>
+						<input type="submit" value="Submit"/>
+		</form>
+	</div>
+	
+	
+	<svg id="drawPanel" width="960" height="600"></svg>
+	
+	
+	<script src="http://localhost:8080/LODVisualizerV2/d3.min.js"></script>
+	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+	<script>
+		$("#drawPanel").attr('width', $(window).width()).attr('height', $(window).height()-100);
+		
+		$(document).ready(function(){
+			
+			$("#myForm").on("submit", function(e){
+				e.preventDefault();
+				
+				$("#drawPanel").empty();
+				
+				var subj = $("#myForm input[name='subj']").val(),
+				pred = $("#myForm input[name='pred']").val(), 
+				obj = $("#myForm input[name='obj']").val(),
+				lim = $("#myForm input[name='lim']").val(),
+				dep = $("#myForm input[name='dep']").val();
+				
+				d3.json("http://localhost:8080/LODVisualizerV2/JDBC_Servlet?subj="+subj+"&pred="+ pred +"&obj="+ obj+"&lim="+lim+"&dep="+dep, function(error,graph) {
+		
+					if (error) throw error;
+		
+					var svg = d3.select("svg"),
+				    width = +svg.attr("width"),
+				    height = +svg.attr("height");
+				
+					var color = d3.scaleOrdinal(d3.schemeCategory20);
+					
+					var simulation = d3.forceSimulation()
+					    .force("link", d3.forceLink().id(function(d) { return d.id; }).distance(70))
+					    .force("charge", d3.forceManyBody().strength(-50))
+					    .force('collision', d3.forceCollide().radius(15))
+					    .force("center", d3.forceCenter(width / 2, height / 2));
+					
+					
+					function dragstarted(d) {
+					  if (!d3.event.active) simulation.alphaTarget(1).restart();
+					  d.fx = d.x;
+					  d.fy = d.y;
+					}
+					
+					function dragged(d) {
+					  d.fx = d3.event.x;
+					  d.fy = d3.event.y;
+					}
+					
+					function dragended(d) {
+					  if (!d3.event.active) simulation.alphaTarget(0);
+					  d.fx = null;
+					  d.fy = null;
+					}
+					
+				  	var link = svg.append("g")
+				      	.attr("class", "links")
+				    	.selectAll("line")
+				    	.data(graph.links)
+				    	.enter().append("line")
+				      	.attr("stroke-width", function(d) { return Math.sqrt(d.value); });
+		
+					var node = svg.append("g")
+				      	.attr("class", "nodes")
+				   		.selectAll("g")
+				    	.data(graph.nodes)
+				    	.enter().append("g");
+					
+					simulation
+				      .nodes(graph.nodes)
+				      .on("tick", ticked);
+		
+					simulation.force("link")
+				      .links(graph.links);
+				    
+				  	var circles = node.append("circle")
+				      	.attr("r", 10)
+				      	.attr("fill", function(d) { return color(d.group); })
+				      	.call(d3.drag()
+				          .on("start", dragstarted)
+				          .on("drag", dragged)
+				          .on("end", dragended));
+		
+				  var lables = node.append("text")
+				      .text(function(d) 
+				    	{
+				        	return d.id;
+				      	})
+				      .attr('x', -30)
+				      .attr('y', -15)
+				      .style("font-size", "10px")
+				      .style("font-family", 'Tahoma')
+				      .style("stroke", "black")
+				      .style("stroke-width", "0.2")
+				      .style("fill", function(d) { return color(d.group); });
+		        	  
+					
+				  node.append("title")
+				      .text(function(d) { return d.id; });
+		
+				
+		
+				  function ticked() 
+				  	{
+					    link
+					        .attr("x1", function(d) { return d.source.x; })
+					        .attr("y1", function(d) { return d.source.y; })
+					        .attr("x2", function(d) { return d.target.x; })
+					        .attr("y2", function(d) { return d.target.y; });
+					
+					    node
+					        .attr("transform", function(d) 
+					        {
+					          return "translate(" + d.x + "," + d.y + ")";
+					        });
+					   
+					}
+				});
+				
+				
+			});
+			
+			
+		});
+	
+	
+	
+	
+	
+	
+	
+	</script>
+</body>
