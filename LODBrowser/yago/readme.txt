@@ -1,3 +1,5 @@
+-Yago core Daten von http://resources.mpi-inf.mpg.de/yago-naga/yago3.1/yagoFacts.tsv.7z herunterladen
+
 - YagoSingle.java mit dem Verzeichnis der CORE-Daten als Argument 
 starten und so in die Datei 'allfacts.tsv_' transformieren
 
