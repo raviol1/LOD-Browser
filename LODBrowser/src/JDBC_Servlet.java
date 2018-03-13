@@ -43,8 +43,8 @@ public class JDBC_Servlet extends HttpServlet {
 			}
 			String url = "jdbc:postgresql://localhost/YAGO";
 			Properties props = new Properties();
-			props.setProperty("user", "tom");
-			props.setProperty("password", "L4jocond4");
+			props.setProperty("user", "<USERNAME>");
+			props.setProperty("password", "<PASSWORD>");
 			props.setProperty("port", "5432");
 			try {
 				connection = DriverManager.getConnection(url, props);
@@ -84,7 +84,7 @@ public class JDBC_Servlet extends HttpServlet {
 				Statement stmt = connection.createStatement();
 				ResultSet rset = null;
 				ResultSet rsetAdd = null;
-				String queryS =   (subj != "") ? "SUBJ='" + subj + "'" 
+				String queryS =   (subj != "") ? "SUBJ='" + subj + "'"
 								+ ((pred != "") ? " AND PRED='" + pred + "'" : "")
 								+ ((obj != "") ? " AND OBJ='" + obj + "'" : "")
 								+ ((lim != "") ? " LIMIT " + (Integer.valueOf(lim)+1) : " LIMIT 20")
@@ -94,7 +94,7 @@ public class JDBC_Servlet extends HttpServlet {
 				rset = stmt.executeQuery("SELECT * FROM allfacts WHERE " + queryS);
 
 				if (!rset.next()) {
-					queryS = (subj != "") ? "SUBJ like '%" + subj + "%'" 
+					queryS = (subj != "") ? "SUBJ like '%" + subj + "%'"
 							+ ((pred != "") ? " AND PRED like '%" + pred + "%'" : "")
 							+ ((obj != "") ? " AND OBJ like '%" + obj + "%'" : "")
 							+ ((lim != "") ? " LIMIT " + (Integer.valueOf(lim)+1) : " LIMIT 20")
@@ -147,7 +147,7 @@ public class JDBC_Servlet extends HttpServlet {
 							query += ")";
 						}
 					}
-					
+
 					System.out.println(query+"");
 					rsetAdd = stmt.executeQuery(query);
 
