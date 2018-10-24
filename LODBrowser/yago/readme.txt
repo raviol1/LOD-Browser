@@ -1,10 +1,20 @@
--Yago core Daten von http://resources.mpi-inf.mpg.de/yago-naga/yago3.1/yagoFacts.tsv.7z herunterladen
+-Geh sicher dass postgres installiert ist. Auf Linux server apt updaten und upgraden, dann postgres installieren.
+
+-Yago core Daten von http://resources.mpi-inf.mpg.de/yago-naga/yago3.1/yagoFacts.tsv.7z herunterladen und nicht auspacken.
 
 - YagoSingle.java mit dem Verzeichnis der CORE-Daten als Argument 
 starten und so in die Datei 'allfacts.tsv_' transformieren
 
-- Eine PostgreSQL-Shell oeffnen: 'psql -U postgres' und in die 
-Yago-Datenbank wechseln '\c YAGO'
+- Wenn noch weder benutzer noch db besteht koennen diese mithilfe dieser kommandos erstellt werden:
+
+  > sudo -u postgres createuser >dein username<
+  > sudo -u postgres createdb >dein username< (eine db mit dem username muss bestehen)
+  > sudo -u postgres createdb yago
+  
+- Dann zum öffnen der db;
+  > psql -U >dein username<
+  und in die Yago-Datenbank wechseln:
+  > \c YAGO
 
 - Dort dann die folgenden SQL-Kommandos zum Importieren der Daten 
 ausfuehren:
