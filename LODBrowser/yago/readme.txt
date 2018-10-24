@@ -22,7 +22,7 @@ ausfuehren:
 DROP TABLE IF EXISTS AllFacts;
 CREATE TABLE AllFacts(SUBJ VARCHAR(256), PRED VARCHAR(256), OBJ 
 VARCHAR(256), PRIMARY KEY(SUBJ, PRED, OBJ));
-COPY AllFacts FROM '/tmp/allfacts.tsv_' ENCODING 'UTF8';
+COPY AllFacts FROM '>weg zum ordner mit</allfacts.tsv_' ENCODING 'UTF8';
 
 Das sollte etwa folgendermassen aussehen:
 
@@ -43,4 +43,3 @@ yago=# COPY AllFacts FROM '/tmp/allfacts.tsv_' ENCODING 'UTF8';
 COPY 12430700
 yago=#
 
-because duplicates stop the copy process, i removed the primary key
